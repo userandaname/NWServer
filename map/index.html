@@ -36,36 +36,39 @@
     <embed id="dynmapEmbed" src="https://147.185.221.20:57433"></embed>
     <script>
       const embedElement = document.getElementById('dynmapEmbed');
+      let previousUrl = embedElement.src; // Store initial URL
   
-      window.addEventListener('hashchange', () => {
-        const embedUrl = embedElement.src;
-        const hashFragment = embedUrl.split('#')[1]; // Extract hash fragment (arguments)
+      const checkUrl = setInterval(() => {
+        const currentUrl = embedElement.src;
   
-        // Parse hash fragment to extract parameters (modify as needed)
-        const params = new URLSearchParams(hashFragment);
-        const world = params.get('world');
-        const x = params.get('x');
-        const y = params.get('y');
-        const z = params.get('z');
-        const view = params.get('view');
+        if (currentUrl !== previousUrl) { // Check for URL change
+          previousUrl = currentUrl; // Update stored URL
   
-        // Construct new main webpage URL with arguments
-        let newUrl = window.location.origin + window.location.pathname; // Base URL
-        if (world) newUrl += `?world=${world}`;
-        if (x && y && z) newUrl += `&xyz=${x},${y},${z}`;
-        if (view) newUrl += `&view=${view}`;
+          const hashFragment = currentUrl.split('#')[1]; // Extract hash fragment (arguments)
   
-        // Update main webpage URL
-        history.replaceState(null, null, newUrl);
+          // Parse hash fragment to extract parameters (modify as needed)
+          const params = new URLSearchParams(hashFragment);
+          const world = params.get('world');
+          const x = params.get('x');
+          const y = params.get('y');
+          const z = params.get('z');
+          const view = params.get('view');
   
-        // Update embed src (optional)
-        // embedElement.src = embedUrl; // Optional to reflect changes within the dynmap
-      });
+          // Construct new main webpage URL with arguments
+          let newUrl = window.location.origin + window.location.pathname; // Base URL
+          if (world) newUrl += `?world=${world}`;
+          if (x && y && z) newUrl += `&xyz=${x},${y},${z}`;
+          if (view) newUrl += `&view=${view}`;
+  
+          // Update main webpage URL
+          history.replaceState(null, null, newUrl);
+        }
+      }, 100); // Check interval (adjust as needed)
   
       // Check for arguments on initial load and update URL (optional)
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.has('world') || urlParams.has('x') || urlParams.has('y') || urlParams.has('z') || urlParams.has('view')) {
-        window.location.href = window.location.origin + window.location.pathname; // Trigger hashchange event
+        window.location.href = window.location.origin + window.location.pathname; // Trigger checkUrl
       }
     </script>
   </body>
