@@ -33,28 +33,14 @@
   </style>
 </head>
 <body>
-  <embed id="dynmapEmbed" src="https://147.185.221.20:57433"></embed>
-  <script>
-    const embedElement = document.getElementById('dynmapEmbed');
-    const urlParams = new URLSearchParams(window.location.search);
-
-    // Extract parameters from URL (modify as needed based on your dynmap parameters)
-    const world = urlParams.get('world');
-    const x = urlParams.get('x');
-    const y = urlParams.get('y');
-    const z = urlParams.get('z');
-    const view = urlParams.get('view');
-
-    // Build new URL with captured parameters
-    let newUrl = "https://147.185.221.20:57433";
-    if (world) newUrl += `?world=${world}`;
-    if (x && y && z) newUrl += `&xyz=${x},${y},${z}`;
-    if (view) newUrl += `&view=${view}`;
-
-    // Update embed src and optionally refresh
-    embedElement.src = newUrl;
-    // uncomment to refresh after update (optional)
-    // window.location.href = newUrl;
-  </script>
-</body>
+    <embed id="dynmapEmbed" src="https://147.185.221.20:57433"></embed>
+    <script>
+      const embedElement = document.getElementById('dynmapEmbed');
+  
+      // Update embed src whenever the URL changes
+      window.addEventListener('hashchange', () => {
+        embedElement.src = embedElement.src; // Trigger attribute change
+      });
+    </script>
+  </body>
 </html>
