@@ -37,9 +37,10 @@
     <script>
       const embedElement = document.getElementById('dynmapEmbed');
   
-      // Update embed src whenever the URL changes
+      // Update embed src and URL on hashchange
       window.addEventListener('hashchange', () => {
-        embedElement.src = embedElement.src; // Trigger attribute change
+        const newUrl = embedElement.src; // Get updated URL from embed
+        history.replaceState(null, null, newUrl); // Update browser history without reload
       });
     </script>
   </body>
