@@ -28,55 +28,33 @@
     <!--/ favicons and stuff lol-->
   <title>NW Server - Map</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden; /* Disable scrollbars */
-    }
+    html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; /* Disable scrollbars */ }
+    embed { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; border: none; }
   </style>
 </head>
 <body>
-  <div id="map-container"></div>
+  <embed id="dynmapEmbed" src="https://147.185.221.20:57433"></embed>
   <script>
-    const mapContainer = document.getElementById('map-container');
-    const baseUrl = 'https://147.185.221.20:57433'; // Your dynmap base URL
+    const embedElement = document.getElementById('dynmapEmbed');
+    const urlParams = new URLSearchParams(window.location.search);
 
-    // Function to parse URL parameters
-    function getUrlParams() {
-      const searchParams = new URLSearchParams(window.location.search);
-      const params = {};
-      for (const [key, value] of searchParams.entries()) {
-        params[key] = value;
-      }
-      return params;
-    }
+    // Extract parameters from URL (modify as needed based on your dynmap parameters)
+    const world = urlParams.get('world');
+    const x = urlParams.get('x');
+    const y = urlParams.get('y');
+    const z = urlParams.get('z');
+    const view = urlParams.get('view');
 
-    // Function to create the embed element with parameters
-    function createDynmapEmbed(params) {
-      const url = new URL(baseUrl);
-      for (const [key, value] of Object.entries(params)) {
-        url.searchParams.append(key, value);
-      }
-      const embed = document.createElement('embed');
-      embed.src = url.toString();
-      embed.style.width = '100vw';
-      embed.style.height = '100vh';
-      return embed;
-    }
+    // Build new URL with captured parameters
+    let newUrl = "https://147.185.221.20:57433";
+    if (world) newUrl += `?world=${world}`;
+    if (x && y && z) newUrl += `&xyz=${x},${y},${z}`;
+    if (view) newUrl += `&view=${view}`;
 
-    // Get parameters from URL
-    const params = getUrlParams();
-
-    // Create and append the embed element
-    mapContainer.appendChild(createDynmapEmbed(params));
-
-    // Add event listener for popstate event (to handle back/forward buttons)
-    window.addEventListener('popstate', () => {
-      const newParams = getUrlParams();
-      const embed = mapContainer.firstChild;
-      mapContainer.replaceChild(createDynmapEmbed(newParams), embed);
-    });
+    // Update embed src and optionally refresh
+    embedElement.src = newUrl;
+    // uncomment to refresh after update (optional)
+    // window.location.href = newUrl;
   </script>
 </body>
 </html>
