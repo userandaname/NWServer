@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- favicons and stuff lol-->
     <link rel="icon" type="image/png" href="https://nwserver.ddns.net/assets/images/favicons/favicon.ico" sizes="48x48">
     <link rel="icon" type="image/png" href="https://nwserver.ddns.net/assets/images/favicons/favicon-196x196.png" sizes="196x196">
@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" href="https://nwserver.ddns.net/assets/images/favicons/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="https://nwserver.ddns.net/assets/images/favicons/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="https://nwserver.ddns.net/assets/images/favicons/favicon-128.png" sizes="128x128">
-    <meta name="application-name" content=" ">
+    <meta name="application-name" content=" ">
     <meta name="msapplication-TileColor" content="#FFFFFF">
     <meta name="msapplication-TileImage" content="/assets/images/favicons/mstile-144x144.png">
     <meta name="msapplication-square70x70logo" content="/assets/images/favicons/mstile-70x70.png">
@@ -26,50 +26,25 @@
     <link rel="apple-touch-icon-precomposed" sizes="76x76" href="https://nwserver.ddns.net/assets/images/touch/apple-touch-icon-76x76.png">
     <link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://nwserver.ddns.net/assets/images/touch/apple-touch-icon-152x152.png">
     <!--/ favicons and stuff lol-->
-  <title>NW Server - Map</title>
-  <style>
-    html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; /* Disable scrollbars */ }
-    embed { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; border: none; }
-  </style>
+    <title>NW Server - Map</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Disable scrollbars */
+        }
+        embed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw; /* Full viewport width */
+            height: 100vh; /* Full viewport height */
+            border: none;
+        }
+    </style>
 </head>
 <body>
-    <embed id="dynmapEmbed" src="https://147.185.221.20:57433"></embed>
-    <script>
-      const embedElement = document.getElementById('dynmapEmbed');
-      let previousUrl = embedElement.src; // Store initial URL
-  
-      const checkUrl = setInterval(() => {
-        const currentUrl = embedElement.src;
-  
-        if (currentUrl !== previousUrl) { // Check for URL change
-          previousUrl = currentUrl; // Update stored URL
-  
-          const hashFragment = currentUrl.split('#')[1]; // Extract hash fragment (arguments)
-  
-          // Parse hash fragment to extract parameters (modify as needed)
-          const params = new URLSearchParams(hashFragment);
-          const world = params.get('world');
-          const x = params.get('x');
-          const y = params.get('y');
-          const z = params.get('z');
-          const view = params.get('view');
-  
-          // Construct new main webpage URL with arguments
-          let newUrl = window.location.origin + window.location.pathname; // Base URL
-          if (world) newUrl += `?world=${world}`;
-          if (x && y && z) newUrl += `&xyz=${x},${y},${z}`;
-          if (view) newUrl += `&view=${view}`;
-  
-          // Update main webpage URL
-          history.replaceState(null, null, newUrl);
-        }
-      }, 100); // Check interval (adjust as needed)
-  
-      // Check for arguments on initial load and update URL (optional)
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has('world') || urlParams.has('x') || urlParams.has('y') || urlParams.has('z') || urlParams.has('view')) {
-        window.location.href = window.location.origin + window.location.pathname; // Trigger checkUrl
-      }
-    </script>
-  </body>
+    <embed src="https://147.185.221.20:57433"></embed>
+</body>
 </html>
