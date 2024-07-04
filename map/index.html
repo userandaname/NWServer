@@ -44,6 +44,7 @@
         }
     </style>
     <script>
+        // Function to get URL parameters
         function getQueryParams(url) {
             let params = {};
             let parser = document.createElement('a');
@@ -57,6 +58,7 @@
             return params;
         }
 
+        // Function to set the iframe src with URL parameters
         function setIframeSrc() {
             let params = getQueryParams(window.location.href);
             let iframe = document.getElementById('dynmap-embed');
@@ -65,13 +67,20 @@
             iframe.src = `${baseUrl}?${urlParams}`;
         }
 
-        window.addEventListener('hashchange', function() {
-            setIframeSrc();
-        }, false);
+        // Function to update parent URL based on iframe URL
+        function updateParentUrl(event) {
+            if (event.origin === 'https://147.185.221.20:57433') {
+                let newUrl = event.data;
+                history.replaceState(null, '', newUrl);
+            }
+        }
 
-        window.addEventListener('load', function() {
-            setIframeSrc();
-        }, false);
+        // Event listeners for page load and hash change
+        window.addEventListener('load', setIframeSrc, false);
+        window.addEventListener('hashchange', setIframeSrc, false);
+
+        // Event listener to handle messages from iframe
+        window.addEventListener('message', updateParentUrl, false);
     </script>
 </head>
 <body>
