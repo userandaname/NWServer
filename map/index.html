@@ -37,33 +37,36 @@
     <script>
       const embedElement = document.getElementById('dynmapEmbed');
   
-      // Capture user interaction and extract relevant data (replace with your logic)
-      function captureInteraction() {
-        const world = "world_name"; // Replace with actual world name
-        const x = 100; // Replace with actual x coordinate
-        const y = 50; // Replace with actual y coordinate
-        const z = -20; // Replace with actual z coordinate
-        const view = "some_view_setting"; // Replace with actual view setting
-        return { world, x, y, z, view };
+      window.addEventListener('hashchange', () => {
+        const embedUrl = embedElement.src;
+        const hashFragment = embedUrl.split('#')[1]; // Extract hash fragment (arguments)
+  
+        // Parse hash fragment to extract parameters (modify as needed)
+        const params = new URLSearchParams(hashFragment);
+        const world = params.get('world');
+        const x = params.get('x');
+        const y = params.get('y');
+        const z = params.get('z');
+        const view = params.get('view');
+  
+        // Construct new main webpage URL with arguments
+        let newUrl = window.location.origin + window.location.pathname; // Base URL
+        if (world) newUrl += `?world=${world}`;
+        if (x && y && z) newUrl += `&xyz=${x},${y},${z}`;
+        if (view) newUrl += `&view=${view}`;
+  
+        // Update main webpage URL
+        history.replaceState(null, null, newUrl);
+  
+        // Update embed src (optional)
+        // embedElement.src = embedUrl; // Optional to reflect changes within the dynmap
+      });
+  
+      // Check for arguments on initial load and update URL (optional)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('world') || urlParams.has('x') || urlParams.has('y') || urlParams.has('z') || urlParams.has('view')) {
+        window.location.href = window.location.origin + window.location.pathname; // Trigger hashchange event
       }
-  
-      // Update embed src and optionally URL on interaction
-      function updateEmbed() {
-        const interactionData = captureInteraction();
-        let newUrl = "https://147.185.221.20:57433";
-        if (interactionData.world) newUrl += `?world=${interactionData.world}`;
-        if (interactionData.x && interactionData.y && interactionData.z) newUrl += `&xyz=${interactionData.x},${interactionData.y},${interactionData.z}`;
-        if (interactionData.view) newUrl += `&view=${interactionData.view}`;
-        embedElement.src = newUrl;
-        // uncomment to update history without reload
-        // history.replaceState(null, null, newUrl);
-      }
-  
-      // Update embed on initial load (optional)
-      updateEmbed();
-  
-      // Add event listener to capture user interaction (replace with your logic)
-      // embedElement.addEventListener('some_dynmap_event', updateEmbed); // Replace with appropriate event
     </script>
   </body>
 </html>
