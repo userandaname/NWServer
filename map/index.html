@@ -60,7 +60,7 @@
         function setIframeSrc() {
             let params = getQueryParams(window.location.href);
             let iframe = document.getElementById('dynmap-embed');
-            let baseUrl = 'https://127.0.0.1:12345';
+            let baseUrl = 'https://147.185.221.20:57433';
             let urlParams = new URLSearchParams(params).toString();
             iframe.src = `${baseUrl}?${urlParams}`;
         }
