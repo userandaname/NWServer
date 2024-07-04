@@ -67,7 +67,9 @@
         function updateParentUrl(event) {
             if (event.origin === 'https://147.185.221.20:57433') {
                 let newUrl = event.data;
-                history.replaceState(null, '', newUrl);
+                let url = new URL(newUrl);
+                let params = new URLSearchParams(url.search);
+                history.replaceState(null, '', `?${params.toString()}`);
             }
         }
 
