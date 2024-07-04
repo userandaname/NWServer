@@ -37,11 +37,33 @@
     <script>
       const embedElement = document.getElementById('dynmapEmbed');
   
-      // Update embed src and URL on hashchange
-      window.addEventListener('hashchange', () => {
-        const newUrl = embedElement.src; // Get updated URL from embed
-        history.replaceState(null, null, newUrl); // Update browser history without reload
-      });
+      // Capture user interaction and extract relevant data (replace with your logic)
+      function captureInteraction() {
+        const world = "world_name"; // Replace with actual world name
+        const x = 100; // Replace with actual x coordinate
+        const y = 50; // Replace with actual y coordinate
+        const z = -20; // Replace with actual z coordinate
+        const view = "some_view_setting"; // Replace with actual view setting
+        return { world, x, y, z, view };
+      }
+  
+      // Update embed src and optionally URL on interaction
+      function updateEmbed() {
+        const interactionData = captureInteraction();
+        let newUrl = "https://147.185.221.20:57433";
+        if (interactionData.world) newUrl += `?world=${interactionData.world}`;
+        if (interactionData.x && interactionData.y && interactionData.z) newUrl += `&xyz=${interactionData.x},${interactionData.y},${interactionData.z}`;
+        if (interactionData.view) newUrl += `&view=${interactionData.view}`;
+        embedElement.src = newUrl;
+        // uncomment to update history without reload
+        // history.replaceState(null, null, newUrl);
+      }
+  
+      // Update embed on initial load (optional)
+      updateEmbed();
+  
+      // Add event listener to capture user interaction (replace with your logic)
+      // embedElement.addEventListener('some_dynmap_event', updateEmbed); // Replace with appropriate event
     </script>
   </body>
 </html>
