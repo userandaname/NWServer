@@ -34,7 +34,7 @@
             height: 100%;
             overflow: hidden; /* Disable scrollbars */
         }
-        embed {
+        iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -43,8 +43,38 @@
             border: none;
         }
     </style>
+    <script>
+        function getQueryParams(url) {
+            let params = {};
+            let parser = document.createElement('a');
+            parser.href = url;
+            let query = parser.search.substring(1);
+            let vars = query.split('&');
+            for (let i = 0; i < vars.length; i++) {
+                let pair = vars[i].split('=');
+                params[pair[0]] = decodeURIComponent(pair[1]);
+            }
+            return params;
+        }
+
+        function setIframeSrc() {
+            let params = getQueryParams(window.location.href);
+            let iframe = document.getElementById('dynmap-embed');
+            let baseUrl = 'https://127.0.0.1:12345';
+            let urlParams = new URLSearchParams(params).toString();
+            iframe.src = `${baseUrl}?${urlParams}`;
+        }
+
+        window.addEventListener('hashchange', function() {
+            setIframeSrc();
+        }, false);
+
+        window.addEventListener('load', function() {
+            setIframeSrc();
+        }, false);
+    </script>
 </head>
 <body>
-    <embed src="https://147.185.221.20:57433"></embed>
+    <iframe id="dynmap-embed"></iframe>
 </body>
 </html>
