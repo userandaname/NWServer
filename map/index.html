@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- favicons and stuff lol-->
     <link rel="icon" type="image/png" href="https://nwserver.ddns.net/assets/images/favicons/favicon.ico" sizes="48x48">
     <link rel="icon" type="image/png" href="https://nwserver.ddns.net/assets/images/favicons/favicon-196x196.png" sizes="196x196">
@@ -26,62 +26,57 @@
     <link rel="apple-touch-icon-precomposed" sizes="76x76" href="https://nwserver.ddns.net/assets/images/touch/apple-touch-icon-76x76.png">
     <link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://nwserver.ddns.net/assets/images/touch/apple-touch-icon-152x152.png">
     <!--/ favicons and stuff lol-->
-    <title>NW Server - Map</title>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden; /* Disable scrollbars */
-        }
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw; /* Full viewport width */
-            height: 100vh; /* Full viewport height */
-            border: none;
-        }
-    </style>
-    <script>
-        // Function to get URL parameters
-        function getQueryParams(url) {
-            let params = {};
-            let parser = new URL(url);
-            for (let [key, value] of parser.searchParams) {
-                params[key] = value;
-            }
-            return params;
-        }
-
-        // Function to set the iframe src with URL parameters
-        function setIframeSrc() {
-            let params = getQueryParams(window.location.href);
-            let iframe = document.getElementById('dynmap-embed');
-            let baseUrl = 'https://147.185.221.20:57433';
-            let urlParams = new URLSearchParams(params).toString();
-            iframe.src = `${baseUrl}?${urlParams}`;
-        }
-
-        // Function to update parent URL based on iframe URL
-        function updateParentUrl(event) {
-            if (event.origin === 'https://147.185.221.20:57433') {
-                let newUrl = event.data;
-                let url = new URL(newUrl);
-                let params = new URLSearchParams(url.search);
-                history.replaceState(null, '', `?${params.toString()}`);
-            }
-        }
-
-        // Event listeners for page load and hash change
-        window.addEventListener('load', setIframeSrc, false);
-        window.addEventListener('hashchange', setIframeSrc, false);
-
-        // Event listener to handle messages from iframe
-        window.addEventListener('message', updateParentUrl, false);
-    </script>
+  <title>NW Server - Map</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden; /* Disable scrollbars */
+    }
+  </style>
 </head>
 <body>
-    <iframe id="dynmap-embed"></iframe>
+  <div id="map-container"></div>
+  <script>
+    const mapContainer = document.getElementById('map-container');
+    const baseUrl = 'https://147.185.221.20:57433'; // Your dynmap base URL
+
+    // Function to parse URL parameters
+    function getUrlParams() {
+      const searchParams = new URLSearchParams(window.location.search);
+      const params = {};
+      for (const [key, value] of searchParams.entries()) {
+        params[key] = value;
+      }
+      return params;
+    }
+
+    // Function to create the embed element with parameters
+    function createDynmapEmbed(params) {
+      const url = new URL(baseUrl);
+      for (const [key, value] of Object.entries(params)) {
+        url.searchParams.append(key, value);
+      }
+      const embed = document.createElement('embed');
+      embed.src = url.toString();
+      embed.style.width = '100vw';
+      embed.style.height = '100vh';
+      return embed;
+    }
+
+    // Get parameters from URL
+    const params = getUrlParams();
+
+    // Create and append the embed element
+    mapContainer.appendChild(createDynmapEmbed(params));
+
+    // Add event listener for popstate event (to handle back/forward buttons)
+    window.addEventListener('popstate', () => {
+      const newParams = getUrlParams();
+      const embed = mapContainer.firstChild;
+      mapContainer.replaceChild(createDynmapEmbed(newParams), embed);
+    });
+  </script>
 </body>
 </html>
