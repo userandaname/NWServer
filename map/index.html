@@ -45,20 +45,6 @@
     </style>
 </head>
 <body>
-    <embed id="dynmapEmbed" src="https://147.185.221.20:57433"></embed>
-    <script>
-      window.addEventListener('message', (event) => {
-        if (event.origin !== 'https://147.185.221.20:57433' && event.source !== embedElement) return; // Security check
-        if (event.data.type !== 'viewChange') return;
-  
-        const data = event.data.data;
-        // Update main webpage URL based on received data (modify as needed)
-        let newUrl = window.location.origin + window.location.pathname; // Base URL
-        if (data.world) newUrl += `?world=${data.world}`;
-        if (data.x && data.y && data.z) newUrl += `&xyz=${data.x},${data.y},${data.z}`;
-        if (data.view) newUrl += `&view=${data.view}`;
-        history.replaceState(null, null, newUrl);
-      });
-    </script>
-  </body>
+    <embed src="https://147.185.221.20:57433"></embed>
+</body>
 </html>
